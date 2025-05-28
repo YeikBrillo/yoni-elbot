@@ -12,28 +12,27 @@ INICIO_AGUA = datetime.date(2025, 2, 12)
 CICLO_LUZ   = 31
 CICLO_AGUA  = 64
 
+# Modo test controlado por GitHub Actions
+FORCE_TEST = os.getenv('FORCE_TEST') == '1'
 
 def send(message):
     """Envía mensaje por Telegram (solo el texto proporcionado)."""
     url = f'https://api.telegram.org/bot{TOKEN}/sendMessage'
     requests.post(url, data={'chat_id': CHAT_ID, 'text': message})
 
-
 def check_internet():
     # Pago de internet el día 20 de cada mes
     if datetime.date.today().day == 20:
         send("📶 Mamonaa acuérdate de pagar el internet hoy!")
 
-
 def check_meters():
     hoy = datetime.date.today()
     # Luz: cada 31 días exactos
     if (hoy - INICIO_LUZ).days % CICLO_LUZ == 0:
-        send(f"📸 Illo acuérdate de echarle una fotito al contador de luz (cerca de {hoy.strftime('%d/%m/%Y')}).")
+        send(f"💡 Illo acuérdate de echarle una fotito al contador de luz (cerca de {hoy.strftime('%d/%m/%Y')}).")
     # Agua: cada 64 días exactos
     if (hoy - INICIO_AGUA).days % CICLO_AGUA == 0:
-        send(f"📸 Illo acuérdate de echarle una fotito al contador de agua (cerca de {hoy.strftime('%d/%m/%Y')}).")
-
+        send(f"💧 Illo acuérdate de echarle una fotito al contador de agua (cerca de {hoy.strftime('%d/%m/%Y')}).")
 
 def check_matches():
     mañana = datetime.date.today() + datetime.timedelta(days=1)
@@ -52,13 +51,9 @@ def check_matches():
             break
 
 if __name__ == "__main__":
-    # Debug inicial
-    print("🔍 DEBUG: arranca reminders.py")
-    # Modo prueba manual
-    if os.getenv('FORCE_TEST') == '1':
-        send("🧪 Mensaje de prueba: Yoni el bot funciona.")
-    # Funciones principales
-    check_internet()
-    check_meters()
-    check_matches()
-    print("✅ DEBUG: ejecución completada")
+    if FORCE_TEST:
+        send("🧪 Mensaje de prueba: Yoni el bot está perfe")
+    else:
+        check_internet()
+        check_meters()
+        check_matches()
