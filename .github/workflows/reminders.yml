@@ -1,7 +1,7 @@
 name: Yoni Telegram Reminders
 
 on:
-  # Cada día a las 08:30 CEST → 06:30 UTC
+  # Ejecuta cada día a las 08:30 CEST → 06:30 UTC
   schedule:
     - cron: '30 6 * * *'
   # Permite lanzarlo manualmente
@@ -27,4 +27,5 @@ jobs:
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           CHAT_ID:       ${{ secrets.CHAT_ID }}
+          FORCE_TEST:    "1"          # Activa el mensaje de prueba
         run: python reminders.py
