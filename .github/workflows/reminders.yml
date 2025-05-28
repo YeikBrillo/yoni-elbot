@@ -1,11 +1,14 @@
 name: Yoni Telegram Reminders
 
 on:
-  # Ejecuta cada día a las 08:30 CEST → 06:30 UTC
   schedule:
-    - cron: '30 6 * * *'
-  # Permite lanzarlo manualmente
+    - cron: '30 6 * * *'      # 08:30 CEST diario
   workflow_dispatch:
+    inputs:
+      test:
+        description: '¿Enviar mensaje de prueba? (true/false)'
+        required: false
+        default: 'false'
 
 jobs:
   remind:
@@ -27,5 +30,5 @@ jobs:
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           CHAT_ID:       ${{ secrets.CHAT_ID }}
-          FORCE_TEST:    "1"          # Activa el mensaje de prueba
+          FORCE_TEST:    ${{ github.event.inputs.test == 'true' && '1' || '0' }}
         run: python reminders.py
