@@ -3,12 +3,6 @@ import datetime
 import requests
 from bs4 import BeautifulSoup
 
-# justo al principio de reminders.py
-print("🚀 DEBUG: arranca reminders.py")
-if os.getenv("FORCE_TEST") == "1":
-    send("🧪 Mensaje de prueba: Yoni el bot funciona.")
-
-
 # ─── CONFIGURACIÓN ───────────────────────────────────────────────────────────
 TOKEN   = os.getenv('TELEGRAM_TOKEN')
 CHAT_ID = os.getenv('CHAT_ID')
@@ -34,12 +28,10 @@ def check_internet():
 def check_meters():
     hoy = datetime.date.today()
     # Luz: cada 31 días exactos
-    delta_luz = (hoy - INICIO_LUZ).days % CICLO_LUZ
-    if delta_luz == 0:
+    if (hoy - INICIO_LUZ).days % CICLO_LUZ == 0:
         send(f"📸 Illo acuérdate de echarle una fotito al contador de luz (cerca de {hoy.strftime('%d/%m/%Y')}).")
     # Agua: cada 64 días exactos
-    delta_agua = (hoy - INICIO_AGUA).days % CICLO_AGUA
-    if delta_agua == 0:
+    if (hoy - INICIO_AGUA).days % CICLO_AGUA == 0:
         send(f"📸 Illo acuérdate de echarle una fotito al contador de agua (cerca de {hoy.strftime('%d/%m/%Y')}).")
 
 
@@ -59,9 +51,14 @@ def check_matches():
             send("⚽ Novea.. Mañana juega el Málaga en casa. Si no tienes q coger el coxe, no lo muevas!")
             break
 
-
 if __name__ == "__main__":
+    # Debug inicial
+    print("🔍 DEBUG: arranca reminders.py")
+    # Modo prueba manual
+    if os.getenv('FORCE_TEST') == '1':
+        send("🧪 Mensaje de prueba: Yoni el bot funciona.")
+    # Funciones principales
     check_internet()
     check_meters()
     check_matches()
-
+    print("✅ DEBUG: ejecución completada")
