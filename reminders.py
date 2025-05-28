@@ -3,6 +3,12 @@ import datetime
 import requests
 from bs4 import BeautifulSoup
 
+# justo al principio de reminders.py
+print("🚀 DEBUG: arranca reminders.py")
+if os.getenv("FORCE_TEST") == "1":
+    send("🧪 Mensaje de prueba: Yoni el bot funciona.")
+
+
 # ─── CONFIGURACIÓN ───────────────────────────────────────────────────────────
 TOKEN   = os.getenv('TELEGRAM_TOKEN')
 CHAT_ID = os.getenv('CHAT_ID')
